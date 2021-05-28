@@ -1,11 +1,6 @@
 ﻿using Auction.IO.UI.States.Navigators;
-using Auction.IO.UI.ViewModels;
 using Auction.IO.UI.ViewModels.Factories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Auction.IO.UI.Commands
@@ -15,9 +10,9 @@ namespace Auction.IO.UI.Commands
         public event EventHandler CanExecuteChanged;
 
         private INavigator _navigator;
-        private readonly IRootAuctionViewModelFactory _viewModelFactory;
+        private readonly IAuctionViewModelFactory _viewModelFactory;
 
-        public UpdateCurrentViewModelCommand(INavigator navigator, IRootAuctionViewModelFactory viewModelFactory)
+        public UpdateCurrentViewModelCommand(INavigator navigator, IAuctionViewModelFactory viewModelFactory)
         {
             _navigator = navigator;
             _viewModelFactory = viewModelFactory;

@@ -1,10 +1,5 @@
 ﻿using Auction.IO.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Auction.IO.EntityFramework
 {
@@ -12,36 +7,70 @@ namespace Auction.IO.EntityFramework
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Role>()
+                        .HasKey(x => x.UserRole);
+
+            modelBuilder.Entity<Role>()
+                        .HasOne(r => r.UserAccount)
+                        .WithOne(i => i.Role)
+                        .HasForeignKey((UserAccount FK) => FK.RoleId)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<Item>()
+                .HasMany(u => u.Users)
+                .WithMany(i => i.Items);
+
             modelBuilder.Entity<Role>().HasData(new Role
             {
-                Id = 1,
                 UserRole = 1,
-                SystemRole = "Adminstrator"
+                SystemRole = "Administrator",
             },
-            new Role 
+            new Role
             {
-                Id = 2,
                 UserRole = 2,
                 SystemRole = "User"
             });
 
-            modelBuilder.Entity<Account>()
-                .HasOne(x => x.User)
-                .WithOne(a => a.Account)
-                .HasForeignKey((Account FK) => FK.UserId);
-
-            modelBuilder.Entity<Item>()
-                .HasOne(x => x.User)
-                .WithMany(a => a.Items)
-                .HasForeignKey((Item FK) => FK.UserId);
+            modelBuilder.Entity<Item>().HasData(new Item
+            {
+                Id = 1,
+                Name = "Test 1",
+                Image = null,
+                Price = 289.99,
+                LastBidder = "Bidder 8",
+                LastBidPrice = 132.99,
+                IsDeleted = false,
+                IsSold = false
+            },
+            new Item
+            {
+                Id = 2,
+                Name = "Test 2",
+                Image = null,
+                Price = 129.99,
+                LastBidder = "Bidder 5",
+                LastBidPrice = 149.10,
+                IsDeleted = false,
+                IsSold = false
+            },
+            new Item
+            {
+                Id = 3,
+                Name = "Test 3",
+                Image = null,
+                Price = 150,
+                LastBidder = "Bidder 6",
+                LastBidPrice = 168.50,
+                IsDeleted = false,
+                IsSold = false
+            });
 
             base.OnModelCreating(modelBuilder);
         }
 
         public AuctionDbContext(DbContextOptions options) : base(options) { }
-        public DbSet<User> Users { get; set; }
         public DbSet<Item> Items { get; set; }
-        public DbSet<Account> Accounts { get; set; }
+        public DbSet<UserAccount> UserAccounts{ get; set; }
         public DbSet<Role> Roles { get; set; }
     }
 }

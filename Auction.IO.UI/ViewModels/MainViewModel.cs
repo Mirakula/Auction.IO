@@ -1,20 +1,28 @@
-﻿using Auction.IO.UI.States.Navigators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Auction.IO.UI.Commands;
+using Auction.IO.UI.States.Authenticators;
+using Auction.IO.UI.States.Navigators;
+using Auction.IO.UI.ViewModels.Factories;
+using System.Windows.Input;
 
 namespace Auction.IO.UI.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public INavigator Navigator { get; set; }
+        private readonly IAuctionViewModelFactory _viewModelFactory;
 
-        public MainViewModel(INavigator navigator)
+        public INavigator Navigator { get; set; }
+        public IAuthenticator Authenticator { get; }
+        public ICommand UpdateCurrentViewModelCommand { get; }
+
+        public MainViewModel(INavigator navigator, IAuthenticator authenticator, IAuctionViewModelFactory viewModelFactory)
         {
+            Authenticator = authenticator;
             Navigator = navigator;
-            Navigator.UpdateCurrentViewModelCommand.Execute(ViewType.Home);
+            _viewModelFactory = viewModelFactory;
+
+            UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelFactory);
+
+            UpdateCurrentViewModelCommand.Execute(ViewType.Login);
         }
     }
 }

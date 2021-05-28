@@ -7,8 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\bidBackground.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Auction.IO.Domain\Auction.IO.Domain.csproj" />
     <ProjectReference Include="..\Auction.IO.EntityFramework\Auction.IO.EntityFramework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\bidBackground.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

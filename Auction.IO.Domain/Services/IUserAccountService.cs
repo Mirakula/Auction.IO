@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Auction.IO.Domain.Services
 {
-    public interface IBidItemService
+    public interface IUserAccountService : IDataService<UserAccount>
     {
-        Task<UserAccount> Bid(UserAccount buyer, Item item);
+        Task<UserAccount> GetByUserName(string username);
+        Task<UserAccount> GetByEmail(string email);
     }
 }

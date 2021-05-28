@@ -1,11 +1,12 @@
 ﻿using Auction.IO.Domain.Models;
 using Auction.IO.Domain.Services;
+using Auction.IO.UI.States.Authenticators;
+using Auction.IO.UI.States.Navigators;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace Auction.IO.UI.ViewModels
@@ -14,22 +15,13 @@ namespace Auction.IO.UI.ViewModels
     {
         private readonly IDataService<Item> _dataService;
 
-        public Item Item { get; set; }
-
         public ItemViewModel(IDataService<Item> dataService)
         {
             _dataService = dataService;
 
-            Items = Task.Run(async () => await _dataService.GetAll()).Result;
 
-            foreach (var item in Items)
-            {
-                Name = item.Name;
-                Image = item.Image;
-                Price = item.Price;
-                IsSold = item.IsSold;
-                Image = item.Image;
-            }
+            Items = Task.Run(async () => await _dataService.GetAll()).Result;
+            ObservableItems = new ObservableCollection<Item>(Items);
         }
 
         private IEnumerable<Item> _items;
@@ -37,13 +29,35 @@ namespace Auction.IO.UI.ViewModels
         public IEnumerable<Item> Items
         {
             get => _items;
-            set 
+            set
             { 
                 _items = value;
                 OnPropertyChanged(nameof(Items));
             }
         }
 
+
+        private ObservableCollection<Item> _observableItems;
+        public ObservableCollection<Item> ObservableItems 
+        {
+            get => _observableItems;
+            set
+            {
+                _observableItems = value;
+                OnPropertyChanged(nameof(ObservableItems));
+            }
+        }
+
+        private Item _selectedItem;
+        public Item SelectedItem 
+        {
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
+            }
+        }
 
         private string _name;
         public string Name

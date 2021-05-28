@@ -19,27 +19,6 @@ namespace Auction.IO.EntityFramework.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Auction.IO.Domain.Models.Account", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Accounts");
-                });
-
             modelBuilder.Entity("Auction.IO.Domain.Models.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -68,19 +47,46 @@ namespace Auction.IO.EntityFramework.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Items");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            IsSold = false,
+                            LastBidPrice = 132.99000000000001,
+                            LastBidder = "Bidder 8",
+                            Name = "Test 1",
+                            Price = 289.99000000000001
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDeleted = false,
+                            IsSold = false,
+                            LastBidPrice = 149.09999999999999,
+                            LastBidder = "Bidder 5",
+                            Name = "Test 2",
+                            Price = 129.99000000000001
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsDeleted = false,
+                            IsSold = false,
+                            LastBidPrice = 168.5,
+                            LastBidder = "Bidder 6",
+                            Name = "Test 3",
+                            Price = 150.0
+                        });
                 });
 
             modelBuilder.Entity("Auction.IO.Domain.Models.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserRole")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -88,37 +94,29 @@ namespace Auction.IO.EntityFramework.Migrations
                     b.Property<string>("SystemRole")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserRole")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserRole");
 
                     b.ToTable("Roles");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            SystemRole = "Adminstrator",
-                            UserRole = 1
+                            UserRole = 1,
+                            SystemRole = "Administrator"
                         },
                         new
                         {
-                            Id = 2,
-                            SystemRole = "User",
-                            UserRole = 2
+                            UserRole = 2,
+                            SystemRole = "User"
                         });
                 });
 
-            modelBuilder.Entity("Auction.IO.Domain.Models.User", b =>
+            modelBuilder.Entity("Auction.IO.Domain.Models.UserAccount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
@@ -135,8 +133,11 @@ namespace Auction.IO.EntityFramework.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Street")
                         .HasColumnType("nvarchar(max)");
@@ -146,36 +147,56 @@ namespace Auction.IO.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
+
+                    b.ToTable("UserAccounts");
                 });
 
-            modelBuilder.Entity("Auction.IO.Domain.Models.Account", b =>
+            modelBuilder.Entity("ItemUserAccount", b =>
                 {
-                    b.HasOne("Auction.IO.Domain.Models.User", "User")
-                        .WithOne("Account")
-                        .HasForeignKey("Auction.IO.Domain.Models.Account", "UserId")
+                    b.Property<int>("ItemsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ItemsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ItemUserAccount");
+                });
+
+            modelBuilder.Entity("Auction.IO.Domain.Models.UserAccount", b =>
+                {
+                    b.HasOne("Auction.IO.Domain.Models.Role", "Role")
+                        .WithOne("UserAccount")
+                        .HasForeignKey("Auction.IO.Domain.Models.UserAccount", "RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Auction.IO.Domain.Models.Item", b =>
+            modelBuilder.Entity("ItemUserAccount", b =>
                 {
-                    b.HasOne("Auction.IO.Domain.Models.User", "User")
-                        .WithMany("Items")
-                        .HasForeignKey("UserId")
+                    b.HasOne("Auction.IO.Domain.Models.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("Auction.IO.Domain.Models.UserAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Auction.IO.Domain.Models.User", b =>
+            modelBuilder.Entity("Auction.IO.Domain.Models.Role", b =>
                 {
-                    b.Navigation("Account");
-
-                    b.Navigation("Items");
+                    b.Navigation("UserAccount");
                 });
 #pragma warning restore 612, 618
         }

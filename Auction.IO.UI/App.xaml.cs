@@ -1,10 +1,14 @@
 ﻿using Auction.IO.Domain.Models;
 using Auction.IO.Domain.Services;
+using Auction.IO.Domain.Services.AuthenticationService;
+using Auction.IO.Domain.Services.AuthenticationServices;
 using Auction.IO.EntityFramework;
 using Auction.IO.EntityFramework.Services;
+using Auction.IO.UI.States.Authenticators;
 using Auction.IO.UI.States.Navigators;
 using Auction.IO.UI.ViewModels;
 using Auction.IO.UI.ViewModels.Factories;
+using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
@@ -36,22 +40,52 @@ namespace Auction.IO.UI
 
             // Registrujem sve potrebne servise koji ce se koristit kroz aplikaciju
             services.AddSingleton<AuctionDbContextFactory>();
+            services.AddSingleton<IAuthenticationService, AuthenticationService>();
+            services.AddSingleton<IUserAccountService, UserAccountDataService>();
             services.AddSingleton<IDataService<Item>, GenericDataService<Item>>();
-            services.AddSingleton<IDataService<Account>, GenericDataService<Account>>();
+            services.AddSingleton<IDataService<UserAccount>, GenericDataService<UserAccount>>();
             services.AddSingleton<IBidItemService, BidItemService>();
 
+            // Servis hasiranja pasvorda koji dolazi
+            // iz using Microsoft.AspNet.Identity
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+            // Registrujem 'tvornicu' koja generise sve view modele.
+            services.AddSingleton<IAuctionViewModelFactory, AuctionViewModelFactory>();
+            // Registrujem samo jedan BidViewModel jer zelim samo da 
+            // uvijek imam samo jednu instacnu ovog view modela.
+            services.AddSingleton<BidViewModel>();
+
+            //Registrujem sve potrebne view modele
+            services.AddSingleton<ViewModelDelegateRenavigator<HomeViewModel>>();
+            services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
+            {
+                return () => new HomeViewModel(
+                    new ItemViewModel(
+                        services.GetRequiredService<IDataService<Item>>()));
+            });
+
+            services.AddSingleton<CreateViewModel<BidViewModel>>(services => {
+                return () => services.GetRequiredService<BidViewModel>();
+            });
+
+            services.AddSingleton<CreateViewModel<PortfolioViewModel>>(services =>
+            {
+                return () => new PortfolioViewModel();
+            });
 
 
-            // Registrujem sve potrebne factory-ije koji ce automtaski da generisu sve viewModel-e
-            services.AddSingleton<IRootAuctionViewModelFactory, RootAuctionViewModelFactory>();
-            services.AddSingleton<IAuctionViewModelFactory<HomeViewModel>, HomeViewModelFactory>();
-            services.AddSingleton<IAuctionViewModelFactory<PortfolioViewModel>, PortfolioViewModelFactory>();
-            services.AddSingleton<IAuctionViewModelFactory<ItemViewModel>, ItemViewModelFactory>();
+            services.AddSingleton<CreateViewModel<LoginViewModel>>(services =>
+            {
+                return () => new LoginViewModel(
+                    services.GetRequiredService<IAuthenticator>(),
+                    services.GetRequiredService<ViewModelDelegateRenavigator<HomeViewModel>>()); 
+            });
 
             // Registrujem service navigacije i startup MainViewModel
+            services.AddScoped<IAuthenticator, Authenticator>();
             services.AddScoped<INavigator, Navigator>();
             services.AddScoped<MainViewModel>();
-            services.AddScoped<BidViewModel>();
 
             // Registrujem servis za podizanje glavnog prozora.
             services.AddScoped<MainWindow>(s => new MainWindow(s.GetRequiredService<MainViewModel>()));

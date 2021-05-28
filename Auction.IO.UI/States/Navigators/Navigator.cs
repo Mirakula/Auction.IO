@@ -1,8 +1,5 @@
-﻿using Auction.IO.UI.Commands;
-using Auction.IO.UI.Models;
+﻿using Auction.IO.UI.Models;
 using Auction.IO.UI.ViewModels;
-using Auction.IO.UI.ViewModels.Factories;
-using System.Windows.Input;
 
 namespace Auction.IO.UI.States.Navigators
 {
@@ -18,12 +15,5 @@ namespace Auction.IO.UI.States.Navigators
                 OnPropertyChanged(nameof(CurrentViewModel));
             }
         }
-
-        public Navigator(IRootAuctionViewModelFactory viewModelFactory)
-        {
-            UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(this, viewModelFactory);
-        }
-
-        public ICommand UpdateCurrentViewModelCommand { get; set; }
     }
 }

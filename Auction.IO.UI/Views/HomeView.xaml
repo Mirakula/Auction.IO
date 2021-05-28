@@ -3,19 +3,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Auction.IO.UI.Views"
-             xmlns:controls="clr-namespace:Auction.IO.UI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Home view"/>
 
-        <StackPanel Grid.Row="1" Margin="20">
-            <controls:ItemCard  Margin="0, 10" DataContext="{Binding ItemViewModel}" HorizontalAlignment="Left" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" BorderBrush="{StaticResource BrushPrimary1}" CornerRadius="10" Margin="10 20 0 0" Padding="15">
+            <Grid>
+                <ListView ItemsSource="{Binding ItemViewModel.ObservableItems}" BorderThickness="0" SelectedItem="{Binding ItemViewModel.SelectedItem}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Item Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
+                            <GridViewColumn Header="Item Price" DisplayMemberBinding="{Binding Price}" Width="100"/>
+                            <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Time}" Width="150"/>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="0 5"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </Grid>
+        </Border>
+        <Border Grid.Column="1" Grid.Row="0" BorderThickness="3" BorderBrush="{StaticResource BrushPrimary1}" CornerRadius="10" Margin="10 20 0 0" Padding="15" HorizontalAlignment="Center" Height="150" Width="310">
+            <Grid >
+                <StackPanel>
+                    <Label Content="{Binding ItemViewModel.SelectedItem.Name}"/>
+                    <Label Content="{Binding ItemViewModel.SelectedItem.Price, StringFormat={}{0:c}}"/>
+                    <Label Content="{Binding ItemViewModel.SelectedItem.LastBidder}"/>
+                    <Label Content="{Binding ItemViewModel.SelectedItem.LastBidPrice}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <GroupBox Grid.Row="2" Grid.Column="1" Header="Item image" Margin="0 70 0 0">
+            <WrapPanel HorizontalAlignment="Center" Orientation="Vertical">
+                <Image Source="{Binding ItemViewModel.SelectedItem.Image}" Height="100" Width="100"/>
+            </WrapPanel>
+        </GroupBox>
+
+        <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 100 0 0" HorizontalAlignment="Left">
+            <Button Content="Bid" Height="25" Width="75" Command="{Binding ItemViewModel.LoginCommand}"></Button>
+            <Button Content="Exit" Height="25" MaxWidth="75"></Button>
         </StackPanel>
+        
     </Grid>
 </UserControl>

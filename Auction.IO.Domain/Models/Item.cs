@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Auction.IO.Domain.Models
 {
@@ -15,7 +11,6 @@ namespace Auction.IO.Domain.Models
         public double LastBidPrice { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsSold { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public ICollection<UserAccount> Users { get; set; }
     }
 }
