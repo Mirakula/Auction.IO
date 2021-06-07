@@ -7,10 +7,12 @@ namespace Auction.IO.UI.ViewModels
     {
 
         public ItemViewModel ItemViewModel { get; set; }
+        public TimerViewModel TimerViewModel { get; set; }
 
-        public HomeViewModel(ItemViewModel itemViewModel)
-        { 
+        public HomeViewModel(ItemViewModel itemViewModel, TimerViewModel timerViewModel)
+        {
             ItemViewModel = itemViewModel;
+            TimerViewModel = timerViewModel;
         }
     }
 }

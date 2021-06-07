@@ -1,12 +1,9 @@
 ﻿using Auction.IO.Domain.Models;
 using Auction.IO.Domain.Services;
-using Auction.IO.UI.States.Authenticators;
-using Auction.IO.UI.States.Navigators;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace Auction.IO.UI.ViewModels
@@ -18,7 +15,6 @@ namespace Auction.IO.UI.ViewModels
         public ItemViewModel(IDataService<Item> dataService)
         {
             _dataService = dataService;
-
 
             Items = Task.Run(async () => await _dataService.GetAll()).Result;
             ObservableItems = new ObservableCollection<Item>(Items);
@@ -89,6 +85,16 @@ namespace Auction.IO.UI.ViewModels
             {  
                 _price = value;
                 OnPropertyChanged(nameof(Price));
+            }
+        }
+        private string _location;
+        public string Location  
+        {
+            get => _location;
+            set
+            {
+                _location = value;
+                OnPropertyChanged(nameof(Location));
             }
         }
 

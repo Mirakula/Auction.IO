@@ -6,11 +6,13 @@ using Auction.IO.EntityFramework;
 using Auction.IO.EntityFramework.Services;
 using Auction.IO.UI.States.Authenticators;
 using Auction.IO.UI.States.Navigators;
+using Auction.IO.UI.States.Timers;
 using Auction.IO.UI.ViewModels;
 using Auction.IO.UI.ViewModels.Factories;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Auction.IO.UI
@@ -22,6 +24,23 @@ namespace Auction.IO.UI
             // Koristim IServiceProvider za generisanje i registraciju svih
             // potrebnih servisa za DP (depenedency injection)
             IServiceProvider serviceProvider = CreateServiceProvider();
+
+            //IPasswordHasher _passwordHasher = serviceProvider.GetRequiredService<IPasswordHasher>();
+            //IDataService<UserAccount> _userDataService = serviceProvider.GetRequiredService<IDataService<UserAccount>>();
+
+            //var newUser = new UserAccount()
+            //{
+            //    Name = "Amar",
+            //    Surname = "Dzanan",
+            //    Email = "amar.dzanan@edu.fit.ba",
+            //    PasswordHash = _passwordHasher.HashPassword("password"),
+            //    Street = "Radnicka 64",
+            //    Country = "BiH",
+            //    DateJoined = DateTime.Now,
+            //    RoleId = 2
+            //};
+
+            //var result = Task.Run(async () => await _userDataService.Create(newUser)).Result;
 
             // Pokrecem glavni prozor.
             Window window = serviceProvider.GetRequiredService<MainWindow>();
@@ -49,7 +68,8 @@ namespace Auction.IO.UI
             // Servis hasiranja pasvorda koji dolazi
             // iz using Microsoft.AspNet.Identity
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
-
+            // Timer servis
+            services.AddSingleton<ITimerService, TimerStore>();
             // Registrujem 'tvornicu' koja generise sve view modele.
             services.AddSingleton<IAuctionViewModelFactory, AuctionViewModelFactory>();
             // Registrujem samo jedan BidViewModel jer zelim samo da 
@@ -58,11 +78,14 @@ namespace Auction.IO.UI
 
             //Registrujem sve potrebne view modele
             services.AddSingleton<ViewModelDelegateRenavigator<HomeViewModel>>();
+            services.AddSingleton<ViewModelDelegateRenavigator<TimerViewModel>>();
+
             services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
             {
                 return () => new HomeViewModel(
                     new ItemViewModel(
-                        services.GetRequiredService<IDataService<Item>>()));
+                        services.GetRequiredService<IDataService<Item>>()),
+                    new TimerViewModel(new TimerStore()));
             });
 
             services.AddSingleton<CreateViewModel<BidViewModel>>(services => {

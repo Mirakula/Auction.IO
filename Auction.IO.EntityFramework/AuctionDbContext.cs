@@ -39,6 +39,7 @@ namespace Auction.IO.EntityFramework
                 Price = 289.99,
                 LastBidder = "Bidder 8",
                 LastBidPrice = 132.99,
+                Location = "Melburn, IRAN",
                 IsDeleted = false,
                 IsSold = false
             },
@@ -50,6 +51,7 @@ namespace Auction.IO.EntityFramework
                 Price = 129.99,
                 LastBidder = "Bidder 5",
                 LastBidPrice = 149.10,
+                Location = "Erimo, JAPAN",
                 IsDeleted = false,
                 IsSold = false
             },
@@ -60,6 +62,7 @@ namespace Auction.IO.EntityFramework
                 Image = null,
                 Price = 150,
                 LastBidder = "Bidder 6",
+                Location = "Pjongjang, NORTH KOREA",
                 LastBidPrice = 168.50,
                 IsDeleted = false,
                 IsSold = false

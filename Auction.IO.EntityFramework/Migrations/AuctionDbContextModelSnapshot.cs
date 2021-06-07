@@ -41,6 +41,9 @@ namespace Auction.IO.EntityFramework.Migrations
                     b.Property<string>("LastBidder")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -59,6 +62,7 @@ namespace Auction.IO.EntityFramework.Migrations
                             IsSold = false,
                             LastBidPrice = 132.99000000000001,
                             LastBidder = "Bidder 8",
+                            Location = "Melburn, IRAN",
                             Name = "Test 1",
                             Price = 289.99000000000001
                         },
@@ -69,6 +73,7 @@ namespace Auction.IO.EntityFramework.Migrations
                             IsSold = false,
                             LastBidPrice = 149.09999999999999,
                             LastBidder = "Bidder 5",
+                            Location = "Erimo, JAPAN",
                             Name = "Test 2",
                             Price = 129.99000000000001
                         },
@@ -79,6 +84,7 @@ namespace Auction.IO.EntityFramework.Migrations
                             IsSold = false,
                             LastBidPrice = 168.5,
                             LastBidder = "Bidder 6",
+                            Location = "Pjongjang, NORTH KOREA",
                             Name = "Test 3",
                             Price = 150.0
                         });

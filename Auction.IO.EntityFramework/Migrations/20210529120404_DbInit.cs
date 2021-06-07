@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Auction.IO.EntityFramework.Migrations
 {
-    public partial class InicijalizacijaBaze : Migration
+    public partial class DbInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,7 @@ namespace Auction.IO.EntityFramework.Migrations
                     Price = table.Column<double>(type: "float", nullable: false),
                     LastBidder = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastBidPrice = table.Column<double>(type: "float", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsSold = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -92,12 +93,12 @@ namespace Auction.IO.EntityFramework.Migrations
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "Id", "Image", "IsDeleted", "IsSold", "LastBidPrice", "LastBidder", "Name", "Price" },
+                columns: new[] { "Id", "Image", "IsDeleted", "IsSold", "LastBidPrice", "LastBidder", "Location", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, null, false, false, 132.99000000000001, "Bidder 8", "Test 1", 289.99000000000001 },
-                    { 2, null, false, false, 149.09999999999999, "Bidder 5", "Test 2", 129.99000000000001 },
-                    { 3, null, false, false, 168.5, "Bidder 6", "Test 3", 150.0 }
+                    { 1, null, false, false, 132.99000000000001, "Bidder 8", "Melburn, IRAN", "Test 1", 289.99000000000001 },
+                    { 2, null, false, false, 149.09999999999999, "Bidder 5", "Erimo, JAPAN", "Test 2", 129.99000000000001 },
+                    { 3, null, false, false, 168.5, "Bidder 6", "Pjongjang, NORTH KOREA", "Test 3", 150.0 }
                 });
 
             migrationBuilder.InsertData(
@@ -105,7 +106,7 @@ namespace Auction.IO.EntityFramework.Migrations
                 columns: new[] { "UserRole", "SystemRole" },
                 values: new object[,]
                 {
-                    { 1, "Adminstrator" },
+                    { 1, "Administrator" },
                     { 2, "User" }
                 });
 
