@@ -6,24 +6,26 @@ namespace Auction.IO.UI.States.Timers
 {
     public class TimerStore : ITimerService
     {
-        private readonly Timer _timer;
+        private Timer _timer;
         private DateTime _endTime;
+        private double _startTime;
 
-        public double RemainingSeconds => TimeSpan.FromTicks(_endTime.Ticks).TotalSeconds - TimeSpan.FromTicks(DateTime.Now.Ticks).TotalSeconds;
+        public double EndTimeCurrentTimeSecondsDifference => TimeSpan.FromTicks(_endTime.Ticks).TotalSeconds - TimeSpan.FromTicks(DateTime.Now.Ticks).TotalSeconds;
+        public double RemainingSeconds => EndTimeCurrentTimeSecondsDifference > 0 ? EndTimeCurrentTimeSecondsDifference : 0;
 
         public event Action RemainingSecondsChanged;
 
         public TimerStore()
         {
-            _timer = new Timer(120000);
+            _timer = new Timer(1000);
             _timer.Elapsed += _timer_Elapsed;
         }
         
-        public void Start(int durationInSeconds)
+        public void Start()
         {
             _timer.Start();
 
-            _endTime = DateTime.Now.AddSeconds(durationInSeconds);
+            _endTime = DateTime.Now.AddSeconds(120);
             OnRemaininSecondsChanged();
         }
        

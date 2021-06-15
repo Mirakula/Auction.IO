@@ -45,25 +45,60 @@
                 <StackPanel Grid.Column="0">
                     <Label Content="{Binding ItemViewModel.SelectedItem.Name}"/>
                     <Label Content="{Binding ItemViewModel.SelectedItem.Price, StringFormat={}{0:c}}"/>
-                    <Label Content="{Binding ItemViewModel.SelectedItem.LastBidder}"/>
                     <Label Content="{Binding ItemViewModel.SelectedItem.LastBidPrice}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Time left to make a bid: "/>
-                    <Label Content="{Binding TimerViewModel.RemainingSeconds}" FontSize="16"/>
+                    <TextBlock Text="{Binding ItemViewModel.RemainingSeconds, StringFormat=N0}" FontSize="16"/>
                 </StackPanel>
             </Grid>
         </Border>
-        <GroupBox Grid.Row="2" Grid.Column="1" Header="Item image" Margin="0 70 0 0">
-            <WrapPanel HorizontalAlignment="Center" Orientation="Vertical">
-                <Image Source="{Binding ItemViewModel.SelectedItem.Image}" Height="100" Width="100"/>
-            </WrapPanel>
-        </GroupBox>
 
-        <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 100 0 0" HorizontalAlignment="Left">
-            <Button Content="Bid" Height="25" Width="75" Command="{Binding ItemViewModel.LoginCommand}"></Button>
-            <Button Content="Exit" Height="25" MaxWidth="75"></Button>
-        </StackPanel>
-        
+        <Border Margin="5 50 0 0" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2"  BorderThickness="3" BorderBrush="{StaticResource BrushPrimary1}" CornerRadius="10" HorizontalAlignment="Center" Height="150" Width="310">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label Content="{Binding ItemViewModel.LastBidderPrice, StringFormat={}{0:c}, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Visibility="{Binding ItemViewModel.Visibility}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label Content="Last bid price:"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label Content="{Binding ItemViewModel.LastBidder, UpdateSourceTrigger=PropertyChanged}"
+                           Visibility="{Binding ItemViewModel.Visibility}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label Content="Last bidder: " Grid.Row="1" Grid.Column="0"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding ItemViewModel.RemainingSeconds, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                           Visibility="{Binding ItemViewModel.Visibility}" Foreground="Red" FontSize="20" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label Content="Time left" FontSize="18" Foreground="DarkRed"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="0" Grid.Row="2" Margin="20 100 20 0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="Exit" Click="OnExit_Click" FontSize="20" FontWeight="Bold"/>
+            <Button Grid.Column="3" Content="Bid" FontSize="20" FontWeight="Bold" Command="{Binding ItemViewModel.ItemBidCommand}"/>
+        </Grid>
     </Grid>
 </UserControl>

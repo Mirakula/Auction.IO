@@ -75,17 +75,17 @@ namespace Auction.IO.UI
             // Registrujem samo jedan BidViewModel jer zelim samo da 
             // uvijek imam samo jednu instacnu ovog view modela.
             services.AddSingleton<BidViewModel>();
+            services.AddSingleton<TimerStore>();
 
             //Registrujem sve potrebne view modele
             services.AddSingleton<ViewModelDelegateRenavigator<HomeViewModel>>();
-            services.AddSingleton<ViewModelDelegateRenavigator<TimerViewModel>>();
 
             services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
             {
                 return () => new HomeViewModel(
                     new ItemViewModel(
-                        services.GetRequiredService<IDataService<Item>>()),
-                    new TimerViewModel(new TimerStore()));
+                        services.GetRequiredService<IDataService<Item>>(),
+                        services.GetRequiredService<TimerStore>()));
             });
 
             services.AddSingleton<CreateViewModel<BidViewModel>>(services => {

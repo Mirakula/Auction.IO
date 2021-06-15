@@ -24,5 +24,10 @@ namespace Auction.IO.UI.Views
         {
             InitializeComponent();
         }
+
+        private void OnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

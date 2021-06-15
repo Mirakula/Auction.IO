@@ -1,9 +1,13 @@
 ﻿using Auction.IO.Domain.Models;
 using Auction.IO.Domain.Services;
+using Auction.IO.UI.Commands;
+using Auction.IO.UI.States.Timers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace Auction.IO.UI.ViewModels
@@ -11,14 +15,59 @@ namespace Auction.IO.UI.ViewModels
     public class ItemViewModel : ViewModelBase
     {
         private readonly IDataService<Item> _dataService;
+        private readonly TimerStore _timerStore;
 
-        public ItemViewModel(IDataService<Item> dataService)
+        public ItemViewModel(IDataService<Item> dataService, TimerStore timerStore)
         {
             _dataService = dataService;
+            _timerStore = timerStore;
+            _timerStore.RemainingSecondsChanged += _timerStore_RemainingSecondsChanged;
+            _timerStore.Start();
 
             Items = Task.Run(async () => await _dataService.GetAll()).Result;
             ObservableItems = new ObservableCollection<Item>(Items);
+            Visibility = Visibility.Collapsed;
+
+            ItemBidCommand = new ItemBidCommand(this, _timerStore);
         }
+
+        public ICommand ItemBidCommand { get; set; }
+
+        private void _timerStore_RemainingSecondsChanged()
+        {
+            OnPropertyChanged(nameof(RemainingSeconds));
+
+            if (RemainingSeconds == 0)
+                _timerStore.Start();
+
+            // Logic to add last second item to db
+        }
+
+        private Visibility _visibility;
+        public Visibility Visibility
+        {
+            get => _visibility;
+            set
+            {
+                _visibility = value;
+                OnPropertyChanged(nameof(Visibility));
+            }
+        }
+
+
+        private bool _isActiveBid;
+
+        public bool IsActiveBid
+        {
+            get => _isActiveBid;
+            set 
+            {
+                _isActiveBid = value;
+                OnPropertyChanged(nameof(IsActiveBid));
+            }
+        }
+
+        public double RemainingSeconds => _timerStore.RemainingSeconds;
 
         private IEnumerable<Item> _items;
 
@@ -31,7 +80,6 @@ namespace Auction.IO.UI.ViewModels
                 OnPropertyChanged(nameof(Items));
             }
         }
-
 
         private ObservableCollection<Item> _observableItems;
         public ObservableCollection<Item> ObservableItems 
@@ -54,6 +102,8 @@ namespace Auction.IO.UI.ViewModels
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
+
+
 
         private string _name;
         public string Name
@@ -87,6 +137,7 @@ namespace Auction.IO.UI.ViewModels
                 OnPropertyChanged(nameof(Price));
             }
         }
+
         private string _location;
         public string Location  
         {
@@ -97,6 +148,19 @@ namespace Auction.IO.UI.ViewModels
                 OnPropertyChanged(nameof(Location));
             }
         }
+
+        private double _lastBidderPrice;
+
+        public double LastBidderPrice
+        {
+            get =>_lastBidderPrice; 
+            set 
+            {
+                _lastBidderPrice = value;
+                OnPropertyChanged(nameof(LastBidderPrice));
+            }
+        }
+
 
         private BitmapImage _itemImageBitmap;
         public BitmapImage ItemImageBitmap
@@ -131,6 +195,19 @@ namespace Auction.IO.UI.ViewModels
                 OnPropertyChanged(nameof(IsSold));
             }
         }
+
+        private string _lastBidder;
+
+        public string LastBidder
+        {
+            get => _lastBidder;
+            set 
+            { 
+                _lastBidder = value;
+                OnPropertyChanged(nameof(LastBidder));
+            }
+        }
+
 
 
         //TODO: Implement image converter
