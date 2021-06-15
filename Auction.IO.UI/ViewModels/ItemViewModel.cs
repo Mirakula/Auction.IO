@@ -1,6 +1,7 @@
 ﻿using Auction.IO.Domain.Models;
 using Auction.IO.Domain.Services;
 using Auction.IO.UI.Commands;
+using Auction.IO.UI.States.Navigators;
 using Auction.IO.UI.States.Timers;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,14 @@ namespace Auction.IO.UI.ViewModels
     {
         private readonly IDataService<Item> _dataService;
         private readonly TimerStore _timerStore;
+        private readonly INavigator _navigator;
 
-        public ItemViewModel(IDataService<Item> dataService, TimerStore timerStore)
+        public ItemViewModel(IDataService<Item> dataService, TimerStore timerStore, INavigator navigator)
         {
             _dataService = dataService;
             _timerStore = timerStore;
+            _navigator = navigator;
+
             _timerStore.RemainingSecondsChanged += _timerStore_RemainingSecondsChanged;
             _timerStore.Start();
 
@@ -29,10 +33,12 @@ namespace Auction.IO.UI.ViewModels
             Visibility = Visibility.Collapsed;
             IsPutVisible = Visibility.Collapsed;
             IsCallVisible = Visibility.Collapsed;
+            TimeLeftItems = Visibility.Collapsed;
             IsAuction = true;
+            IsLoggedIn = Visibility.Collapsed;
 
-            ItemBidCommand = new ItemBidCommand(this, _timerStore);
-            CallBidCommand = new CallBidCommand()
+            ItemBidCommand = new ItemBidCommand(this, _timerStore, navigator);
+            CallBidCommand = new CallBidCommand(this, _timerStore);
         }
 
         public ICommand ItemBidCommand { get; set; }
@@ -41,15 +47,16 @@ namespace Auction.IO.UI.ViewModels
         private void _timerStore_RemainingSecondsChanged()
         {
             OnPropertyChanged(nameof(RemainingSeconds));
+            OnPropertyChanged(nameof(RemainingSecondsBid));
 
             if (RemainingSeconds == 0)
                 _timerStore.Start();
 
-            // Logic to add last second item to db
+            if (RemainingSecondsBid == 0)
+                Task.Run(async () => await _dataService.Create(SelectedItem));
         }
 
         private Visibility _isPutVisible;
-
         public Visibility IsPutVisible 
         {
             get => _isPutVisible; 
@@ -82,6 +89,40 @@ namespace Auction.IO.UI.ViewModels
             }
         }
 
+        private Visibility _timeLeftItems;
+
+        public Visibility TimeLeftItems
+        {
+            get => _timeLeftItems;
+            set 
+            {
+                _timeLeftItems = value;
+                OnPropertyChanged(nameof(TimeLeftItems));
+            }
+        }
+
+        private Visibility _isLoggedIn;
+        public Visibility IsLoggedIn
+        {
+            get => _isLoggedIn;
+            set 
+            {
+                _isLoggedIn = value;
+                OnPropertyChanged(nameof(IsLoggedIn));
+            }
+        }
+
+        private UserAccount _userAccount;
+        public UserAccount UserAccount 
+        {
+            get => _userAccount;
+            set 
+            {
+                _userAccount = value;
+                OnPropertyChanged(nameof(UserAccount));
+            }
+        }
+
         private bool _isAuction;
         public bool IsAuction 
         {
@@ -94,6 +135,7 @@ namespace Auction.IO.UI.ViewModels
         }
 
         public double RemainingSeconds => _timerStore.RemainingSeconds;
+        public double RemainingSecondsBid => _timerStore.RemainingSeconds;
 
         private IEnumerable<Item> _items;
 

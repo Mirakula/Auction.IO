@@ -20,7 +20,7 @@
 
         <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" BorderBrush="{StaticResource BrushPrimary1}" CornerRadius="10" Margin="10 20 0 0" Padding="15">
             <Grid>
-                <ListView ItemsSource="{Binding ItemViewModel.ObservableItems}" BorderThickness="0" SelectedItem="{Binding ItemViewModel.SelectedItem}">
+                <ListView ItemsSource="{Binding ItemViewModel.ObservableItems}" BorderThickness="0" SelectedItem="{Binding ItemViewModel.SelectedItem}" SelectedIndex="1">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Item Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
@@ -48,9 +48,9 @@
                     <Label Content="{Binding ItemViewModel.SelectedItem.Price, StringFormat={}{0:c}}"/>
                     <Label Content="{Binding ItemViewModel.SelectedItem.LastBidPrice}"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1">
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                     <Label Content="Time left to make a bid: "/>
-                    <TextBlock Text="{Binding ItemViewModel.RemainingSeconds, StringFormat=N0}" FontSize="16"/>
+                    <TextBlock Text="{Binding ItemViewModel.RemainingSeconds, StringFormat=N0}" Visibility="{Binding ItemViewModel.TimeLeftItems}" FontSize="16"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -63,6 +63,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -82,11 +83,17 @@
                     <Label Content="Last bidder: " Grid.Row="1" Grid.Column="0"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="{Binding ItemViewModel.RemainingSeconds, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                    <TextBlock Text="{Binding ItemViewModel.RemainingSecondsBid, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                            Visibility="{Binding ItemViewModel.Visibility}" Foreground="Red" FontSize="20" FontWeight="Bold"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Label Content="Time left" FontSize="18" Foreground="DarkRed"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label Content="Input bid: " Visibility="{Binding ItemViewModel.IsLoggedIn}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBox Width="75" Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Visibility="{Binding ItemViewModel.IsLoggedIn}"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -107,9 +114,13 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
-            <Button Content="Put" Grid.Column="0" Margin="5" Visibility="{Binding ItemViewModel.IsPutVisible}"/>
+
+            <Button Command="{Binding ItemViewModel.CallBidCommand}" Content="Put" Grid.Column="0" Margin="5" Visibility="{Binding ItemViewModel.IsPutVisible}"/>
             <Button Content="Call" Grid.Column="1" Margin="5" Visibility="{Binding ItemViewModel.IsCallVisible}"/>
+        </Grid>
+
+        <Grid Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Login" Height="25" Width="75"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,7 +1,9 @@
 ﻿using Auction.IO.Domain.Models;
+using Auction.IO.UI.States.Navigators;
 using Auction.IO.UI.States.Timers;
 using Auction.IO.UI.ViewModels;
 using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Auction.IO.UI.Commands
@@ -10,11 +12,13 @@ namespace Auction.IO.UI.Commands
     {
         private readonly TimerStore _timerStore;
         private readonly ItemViewModel _itemViewModel;
+        public readonly INavigator _navigator;
 
-        public ItemBidCommand(ItemViewModel itemViewModel, TimerStore timerStore)
+        public ItemBidCommand(ItemViewModel itemViewModel, TimerStore timerStore, INavigator navigator)
         {
             _timerStore = timerStore;
             _itemViewModel = itemViewModel;
+            _navigator = navigator;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -29,10 +33,14 @@ namespace Auction.IO.UI.Commands
             _itemViewModel.Visibility = System.Windows.Visibility.Visible;
             _itemViewModel.IsCallVisible = System.Windows.Visibility.Visible;
             _itemViewModel.IsPutVisible = System.Windows.Visibility.Visible;
+            _itemViewModel.TimeLeftItems = System.Windows.Visibility.Collapsed;
+
             _itemViewModel.IsAuction = false;
+            _itemViewModel.IsLoggedIn = Visibility.Visible;
 
             _itemViewModel.LastBidder = _itemViewModel.SelectedItem.LastBidder;
-            _itemViewModel.LastBidderPrice = _itemViewModel.SelectedItem.LastBidPrice;
+
+            //MessageBox.Show("Niste prijavljeni u sistem. Molimo Vas da se prijavite klikom na Log in dugme !");
         }
     }
 }
