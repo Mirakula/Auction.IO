@@ -30,14 +30,14 @@ namespace Auction.IO.UI
 
             //var newUser = new UserAccount()
             //{
-            //    Name = "Amar",
+            //    Name = "AAmar",
             //    Surname = "Dzanan",
             //    Email = "amar.dzanan@edu.fit.ba",
             //    PasswordHash = _passwordHasher.HashPassword("password"),
             //    Street = "Radnicka 64",
             //    Country = "BiH",
             //    DateJoined = DateTime.Now,
-            //    RoleId = 2
+            //    RoleId = 1
             //};
 
             //var result = Task.Run(async () => await _userDataService.Create(newUser)).Result;

@@ -10,6 +10,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -98,7 +99,17 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" Content="Exit" Click="OnExit_Click" FontSize="20" FontWeight="Bold"/>
-            <Button Grid.Column="3" Content="Bid" FontSize="20" FontWeight="Bold" Command="{Binding ItemViewModel.ItemBidCommand}"/>
+            <Button Grid.Column="3" Content="Bid" FontSize="20" FontWeight="Bold" Command="{Binding ItemViewModel.ItemBidCommand}" IsEnabled="{Binding ItemViewModel.IsAuction}"/>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="3" VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Button Content="Put" Grid.Column="0" Margin="5" Visibility="{Binding ItemViewModel.IsPutVisible}"/>
+            <Button Content="Call" Grid.Column="1" Margin="5" Visibility="{Binding ItemViewModel.IsCallVisible}"/>
         </Grid>
     </Grid>
 </UserControl>

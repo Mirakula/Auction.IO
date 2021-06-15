@@ -21,17 +21,15 @@ namespace Auction.IO.UI.Commands
 
         public bool CanExecute(object parameter)
         {
-            if (_itemViewModel.IsActiveBid)
-                return false;
-            else
-                return true;
+            return true;
         }
 
         public void Execute(object parameter)
         {
-            _itemViewModel.IsActiveBid = true;
-
             _itemViewModel.Visibility = System.Windows.Visibility.Visible;
+            _itemViewModel.IsCallVisible = System.Windows.Visibility.Visible;
+            _itemViewModel.IsPutVisible = System.Windows.Visibility.Visible;
+            _itemViewModel.IsAuction = false;
 
             _itemViewModel.LastBidder = _itemViewModel.SelectedItem.LastBidder;
             _itemViewModel.LastBidderPrice = _itemViewModel.SelectedItem.LastBidPrice;

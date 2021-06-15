@@ -27,11 +27,16 @@ namespace Auction.IO.UI.ViewModels
             Items = Task.Run(async () => await _dataService.GetAll()).Result;
             ObservableItems = new ObservableCollection<Item>(Items);
             Visibility = Visibility.Collapsed;
+            IsPutVisible = Visibility.Collapsed;
+            IsCallVisible = Visibility.Collapsed;
+            IsAuction = true;
 
             ItemBidCommand = new ItemBidCommand(this, _timerStore);
+            CallBidCommand = new CallBidCommand()
         }
 
         public ICommand ItemBidCommand { get; set; }
+        public ICommand CallBidCommand { get; set; }
 
         private void _timerStore_RemainingSecondsChanged()
         {
@@ -41,6 +46,29 @@ namespace Auction.IO.UI.ViewModels
                 _timerStore.Start();
 
             // Logic to add last second item to db
+        }
+
+        private Visibility _isPutVisible;
+
+        public Visibility IsPutVisible 
+        {
+            get => _isPutVisible; 
+            set
+            {
+                _isPutVisible = value;
+                OnPropertyChanged(nameof(IsPutVisible));
+            }
+        }
+
+        private Visibility _isCallVisible;
+        public Visibility IsCallVisible 
+        {
+            get => _isCallVisible; 
+            set
+            {
+                _isCallVisible = value;
+                OnPropertyChanged(nameof(IsCallVisible));
+            }
         }
 
         private Visibility _visibility;
@@ -54,16 +82,14 @@ namespace Auction.IO.UI.ViewModels
             }
         }
 
-
-        private bool _isActiveBid;
-
-        public bool IsActiveBid
+        private bool _isAuction;
+        public bool IsAuction 
         {
-            get => _isActiveBid;
-            set 
+            get => _isAuction;
+            set
             {
-                _isActiveBid = value;
-                OnPropertyChanged(nameof(IsActiveBid));
+                _isAuction = value;
+                OnPropertyChanged(nameof(IsAuction));
             }
         }
 
