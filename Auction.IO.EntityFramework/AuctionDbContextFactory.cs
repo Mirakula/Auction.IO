@@ -8,7 +8,7 @@ namespace Auction.IO.EntityFramework
         public AuctionDbContext CreateDbContext(string[] args = null)
         {
             var options = new DbContextOptionsBuilder<AuctionDbContext>();
-            options.UseSqlServer("Data Source=TUV-TOWER\\OMEGA;Initial Catalog=eAukcija;User Id=sa;Password=omega2000");
+            options.UseSqlServer("Data Source=BETA\\SQLEXPRESS;Initial Catalog=eAukcija;User Id=sa;Password=amar2000");
 
             return new AuctionDbContext(options.Options);
         }

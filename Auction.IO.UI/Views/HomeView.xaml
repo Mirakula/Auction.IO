@@ -30,7 +30,6 @@
                     <Label Content="{Binding ItemViewModel.SelectedItem.Name}"/>
                     <Label Content="{Binding ItemViewModel.SelectedItem.Price, StringFormat={}{0:c}}"/>
                     <Label Content="{Binding ItemViewModel.SelectedItem.LastBidPrice}"/>
-                    <Label Content="{Binding HomeViewModel.Prozor}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label Content="Time left to make a bid: "/>
@@ -48,10 +47,6 @@
 
             <Button Grid.Column="0" Content="Exit" Click="OnExit_Click" FontSize="20" FontWeight="Bold" Height="35" Width="75"/>
             <Button Grid.Column="2" Content="Bid" FontSize="20" FontWeight="Bold" Command="{Binding ItemBidCommand}" Height="35" Width="75"/>
-        </Grid>
-
-        <Grid Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Login" Height="25" Width="75"/>
         </Grid>
     </Grid>
 </UserControl>
