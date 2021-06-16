@@ -1,4 +1,5 @@
-﻿using Auction.IO.Domain.Services;
+﻿using Auction.IO.Domain.Models;
+using Auction.IO.Domain.Services;
 
 
 namespace Auction.IO.UI.ViewModels
@@ -11,5 +12,18 @@ namespace Auction.IO.UI.ViewModels
         {
             _bidItemService = bidItemService;
         }
+
+        private Item _selectedItem;
+
+        public Item SelectedItem
+        {
+            get => _selectedItem;
+            set 
+            {
+                _selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
+            }
+        }
+
     }
 }

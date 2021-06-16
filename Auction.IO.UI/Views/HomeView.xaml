@@ -6,6 +6,7 @@
              xmlns:views="clr-namespace:Auction.IO.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid HorizontalAlignment="Center" Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -38,7 +39,7 @@
             </Grid>
         </Border>
 
-        <Grid Grid.Column="0" Grid.Row="1" Margin="20 0 20 0" Grid.ColumnSpan="2" VerticalAlignment="Center" >
+        <Grid Grid.Column="0" Grid.Row="1" Margin="20 0 20 0" Grid.ColumnSpan="2" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1*"/>

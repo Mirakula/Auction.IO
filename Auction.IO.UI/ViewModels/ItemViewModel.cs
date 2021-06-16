@@ -1,6 +1,7 @@
 ﻿using Auction.IO.Domain.Models;
 using Auction.IO.Domain.Services;
 using Auction.IO.UI.States.Timers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -12,17 +13,31 @@ namespace Auction.IO.UI.ViewModels
     {
         private readonly IDataService<Item> _dataService;
         private readonly TimerStore _timerStore;
+        private readonly BidViewModel _bidViewModel;
 
-        public ItemViewModel(IDataService<Item> dataService, TimerStore timerStore)
+        public ItemViewModel(IDataService<Item> dataService, TimerStore timerStore, BidViewModel bidViewModel)
         {
             _dataService = dataService;
             _timerStore = timerStore;
+            _bidViewModel = bidViewModel;
             _timerStore.RemainingSecondsChanged += _timerStore_RemainingSecondsChanged;
             _timerStore.Start();
 
             Items = Task.Run(async () => await _dataService.GetAll()).Result;
             ObservableItems = new ObservableCollection<Item>(Items);
             Visibility = Visibility.Collapsed;
+        }
+
+        private Item _selectedItem;
+        public Item SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
+                _bidViewModel.SelectedItem = SelectedItem;
+            }
         }
 
         private void _timerStore_RemainingSecondsChanged()
@@ -66,17 +81,6 @@ namespace Auction.IO.UI.ViewModels
             {
                 _observableItems = value;
                 OnPropertyChanged(nameof(ObservableItems));
-            }
-        }
-
-        private Item _selectedItem;
-        public Item SelectedItem 
-        {
-            get => _selectedItem;
-            set
-            {
-                _selectedItem = value;
-                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 

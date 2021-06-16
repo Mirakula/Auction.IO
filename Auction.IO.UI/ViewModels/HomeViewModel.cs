@@ -3,6 +3,7 @@ using Auction.IO.Domain.Services;
 using Auction.IO.UI.Commands;
 using Auction.IO.UI.States.Authenticators;
 using Auction.IO.UI.States.Navigators;
+using System;
 using System.Windows.Input;
 
 namespace Auction.IO.UI.ViewModels
@@ -24,11 +25,10 @@ namespace Auction.IO.UI.ViewModels
             _authenticator = authenticator;
             _renavigator = renavigator;
 
+
             ItemBidCommand = new ItemBidCommand(_authenticator, _navigator, _bidItemService, _renavigator);
         }
 
         public ICommand ItemBidCommand { get; set; }
-
-        public string Prozor => "Prozor";
     }
 }
