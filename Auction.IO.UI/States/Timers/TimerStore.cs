@@ -8,7 +8,6 @@ namespace Auction.IO.UI.States.Timers
     {
         private Timer _timer;
         private DateTime _endTime;
-        private double _startTime;
 
         public double EndTimeCurrentTimeSecondsDifference => TimeSpan.FromTicks(_endTime.Ticks).TotalSeconds - TimeSpan.FromTicks(DateTime.Now.Ticks).TotalSeconds;
         public double RemainingSeconds => EndTimeCurrentTimeSecondsDifference > 0 ? EndTimeCurrentTimeSecondsDifference : 0;

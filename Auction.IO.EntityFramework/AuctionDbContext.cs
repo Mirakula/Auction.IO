@@ -35,7 +35,6 @@ namespace Auction.IO.EntityFramework
             {
                 Id = 1,
                 Name = "Test 1",
-                Image = null,
                 Price = 289.99,
                 LastBidder = "Bidder 8",
                 LastBidPrice = 132.99,
@@ -47,7 +46,6 @@ namespace Auction.IO.EntityFramework
             {
                 Id = 2,
                 Name = "Test 2",
-                Image = null,
                 Price = 129.99,
                 LastBidder = "Bidder 5",
                 LastBidPrice = 149.10,
@@ -59,7 +57,6 @@ namespace Auction.IO.EntityFramework
             {
                 Id = 3,
                 Name = "Test 3",
-                Image = null,
                 Price = 150,
                 LastBidder = "Bidder 6",
                 Location = "Pjongjang, NORTH KOREA",
