@@ -1,5 +1,6 @@
-﻿using Auction.IO.Domain.Models;
-using Auction.IO.UI.States.Timers;
+﻿using Auction.IO.Domain.Services;
+using Auction.IO.UI.States.Authenticators;
+using Auction.IO.UI.States.Navigators;
 using Auction.IO.UI.ViewModels;
 using System;
 using System.Windows.Input;
@@ -8,13 +9,17 @@ namespace Auction.IO.UI.Commands
 {
     public class ItemBidCommand : ICommand
     {
-        private readonly TimerStore _timerStore;
-        private readonly ItemViewModel _itemViewModel;
+        private readonly IAuthenticator _authenticator;
+        private readonly INavigator _navigator;
+        private readonly IBidItemService _bidItemService;
+        private readonly IRenavigator _renavigator;
 
-        public ItemBidCommand(ItemViewModel itemViewModel, TimerStore timerStore)
+        public ItemBidCommand(IAuthenticator authenticator, INavigator navigator, IBidItemService bidItemService, IRenavigator renavigator)
         {
-            _timerStore = timerStore;
-            _itemViewModel = itemViewModel;
+            _authenticator = authenticator;
+            _navigator = navigator;
+            _bidItemService = bidItemService;
+            _renavigator = renavigator;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -26,13 +31,10 @@ namespace Auction.IO.UI.Commands
 
         public void Execute(object parameter)
         {
-            _itemViewModel.Visibility = System.Windows.Visibility.Visible;
-            _itemViewModel.IsCallVisible = System.Windows.Visibility.Visible;
-            _itemViewModel.IsPutVisible = System.Windows.Visibility.Visible;
-            _itemViewModel.IsAuction = false;
-
-            _itemViewModel.LastBidder = _itemViewModel.SelectedItem.LastBidder;
-            _itemViewModel.LastBidderPrice = _itemViewModel.SelectedItem.LastBidPrice;
+            if (_authenticator.IsLoggedIn)
+                _navigator.CurrentViewModel = new BidViewModel(_bidItemService);
+            else
+                _navigator.CurrentViewModel = new LoginViewModel(_authenticator, _renavigator);
         }
     }
 }

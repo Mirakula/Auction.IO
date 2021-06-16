@@ -22,7 +22,7 @@ namespace Auction.IO.UI.ViewModels
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelFactory);
 
-            UpdateCurrentViewModelCommand.Execute(ViewType.Login);
+            UpdateCurrentViewModelCommand.Execute(ViewType.Home);
         }
     }
 }

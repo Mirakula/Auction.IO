@@ -1,14 +1,10 @@
 ﻿using Auction.IO.Domain.Models;
 using Auction.IO.Domain.Services;
-using Auction.IO.UI.Commands;
 using Auction.IO.UI.States.Timers;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace Auction.IO.UI.ViewModels
 {
@@ -27,16 +23,7 @@ namespace Auction.IO.UI.ViewModels
             Items = Task.Run(async () => await _dataService.GetAll()).Result;
             ObservableItems = new ObservableCollection<Item>(Items);
             Visibility = Visibility.Collapsed;
-            IsPutVisible = Visibility.Collapsed;
-            IsCallVisible = Visibility.Collapsed;
-            IsAuction = true;
-
-            ItemBidCommand = new ItemBidCommand(this, _timerStore);
-            CallBidCommand = new CallBidCommand()
         }
-
-        public ICommand ItemBidCommand { get; set; }
-        public ICommand CallBidCommand { get; set; }
 
         private void _timerStore_RemainingSecondsChanged()
         {
@@ -44,31 +31,6 @@ namespace Auction.IO.UI.ViewModels
 
             if (RemainingSeconds == 0)
                 _timerStore.Start();
-
-            // Logic to add last second item to db
-        }
-
-        private Visibility _isPutVisible;
-
-        public Visibility IsPutVisible 
-        {
-            get => _isPutVisible; 
-            set
-            {
-                _isPutVisible = value;
-                OnPropertyChanged(nameof(IsPutVisible));
-            }
-        }
-
-        private Visibility _isCallVisible;
-        public Visibility IsCallVisible 
-        {
-            get => _isCallVisible; 
-            set
-            {
-                _isCallVisible = value;
-                OnPropertyChanged(nameof(IsCallVisible));
-            }
         }
 
         private Visibility _visibility;
@@ -79,17 +41,6 @@ namespace Auction.IO.UI.ViewModels
             {
                 _visibility = value;
                 OnPropertyChanged(nameof(Visibility));
-            }
-        }
-
-        private bool _isAuction;
-        public bool IsAuction 
-        {
-            get => _isAuction;
-            set
-            {
-                _isAuction = value;
-                OnPropertyChanged(nameof(IsAuction));
             }
         }
 
@@ -128,8 +79,6 @@ namespace Auction.IO.UI.ViewModels
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
-
-
 
         private string _name;
         public string Name
@@ -176,7 +125,6 @@ namespace Auction.IO.UI.ViewModels
         }
 
         private double _lastBidderPrice;
-
         public double LastBidderPrice
         {
             get =>_lastBidderPrice; 
@@ -186,30 +134,7 @@ namespace Auction.IO.UI.ViewModels
                 OnPropertyChanged(nameof(LastBidderPrice));
             }
         }
-
-
-        private BitmapImage _itemImageBitmap;
-        public BitmapImage ItemImageBitmap
-        {
-            get => _itemImageBitmap;
-            set 
-            { 
-                _itemImageBitmap = value;
-                OnPropertyChanged(nameof(ItemImageBitmap));
-            }
-        }
-
-        private byte[] _image;
-        public byte[] Image
-        {
-            get => _image;
-            set 
-            {
-                _image = value;
-                OnPropertyChanged(nameof(Image));
-            }
-        }
-
+      
         private bool _isSold;
 
         public bool IsSold
@@ -232,14 +157,6 @@ namespace Auction.IO.UI.ViewModels
                 _lastBidder = value;
                 OnPropertyChanged(nameof(LastBidder));
             }
-        }
-
-
-
-        //TODO: Implement image converter
-        private BitmapImage ConvertToBitmap(byte[] image)
-        {
-            throw new NotImplementedException();
         }
     }
 }

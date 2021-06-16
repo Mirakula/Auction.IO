@@ -85,7 +85,11 @@ namespace Auction.IO.UI
                 return () => new HomeViewModel(
                     new ItemViewModel(
                         services.GetRequiredService<IDataService<Item>>(),
-                        services.GetRequiredService<TimerStore>()));
+                        services.GetRequiredService<TimerStore>()),
+                    services.GetRequiredService<INavigator>(),
+                    services.GetRequiredService<IBidItemService>(),
+                    services.GetRequiredService<IAuthenticator>(),
+                    services.GetRequiredService<ViewModelDelegateRenavigator<HomeViewModel>>());
             });
 
             services.AddSingleton<CreateViewModel<BidViewModel>>(services => {
