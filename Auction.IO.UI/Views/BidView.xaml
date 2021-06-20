@@ -7,8 +7,72 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Bid items"/>
 
-        <Label Content="{Binding SelectedItem}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Margin="20" BorderBrush="{StaticResource BrushPrimary1}" BorderThickness="3" CornerRadius="20">
+            <Grid>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+                    <Label Content="Selected item: " FontSize="16" FontWeight="Heavy"/>
+
+                    <StackPanel Margin="0 30 0 0 ">
+                        <Label Content="Name:" FontSize="16" FontWeight="Medium"/>
+                        <Label Content="{Binding SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
+                        
+                    </StackPanel>
+
+                    <StackPanel>
+                        <Label Content="Price:" FontSize="16" FontWeight="Medium"/>
+                        <Label Content="{Binding SelectedItem.Price, StringFormat={}{0:c}}" FontSize="16"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <Label Content="Location:" FontSize="16" FontWeight="Medium"/>
+                        <Label Content="{Binding SelectedItem.Location}" FontSize="16"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1" BorderBrush="{StaticResource BrushPrimary1}" BorderThickness="3" CornerRadius="20" Margin="20">
+            <Grid>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label Content="Last bid:" FontSize="16" FontWeight="Heavy"/>
+
+                    <StackPanel>
+                        <Label Content="Last bid price:" FontSize="16" FontWeight="Medium"/>
+                        <Label Content="{Binding SelectedItem.LastBidPrice}"  FontSize="16"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <Label Content="Last bidder:" FontSize="16" />
+                        <Label Content="{Binding SelectedItem.LastBidder}" FontSize="16"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>            
+        </Border>
+
+        <Border Grid.Column="2" BorderBrush="{StaticResource BrushPrimary1}" BorderThickness="3" CornerRadius="20" Margin="20">
+            <Grid>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label Content="Options:" FontSize="16" FontWeight="Heavy"/>
+                    <StackPanel>
+                        <Label Content="Enter new bid price: "/>
+                        <TextBox Text="{Binding NewBidPrice}" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="20"/>
+                        <Label Content="Time remainig:" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding RemainingSeconds, StringFormat=N0}" FontSize="16" FontWeight="DemiBold"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button Content="Bid" Width="75" Margin="5" Command="{Binding QuitBidCommand}"/>
+                        <Button Content="Quit" Width="75" Margin="5"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

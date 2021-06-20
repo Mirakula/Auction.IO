@@ -4,6 +4,7 @@ using Auction.IO.Domain.Services.AuthenticationService;
 using Auction.IO.Domain.Services.AuthenticationServices;
 using Auction.IO.EntityFramework;
 using Auction.IO.EntityFramework.Services;
+using Auction.IO.UI.States;
 using Auction.IO.UI.States.Authenticators;
 using Auction.IO.UI.States.Navigators;
 using Auction.IO.UI.States.Timers;
@@ -74,11 +75,13 @@ namespace Auction.IO.UI
             services.AddSingleton<IAuctionViewModelFactory, AuctionViewModelFactory>();
             // Registrujem samo jedan BidViewModel jer zelim samo da 
             // uvijek imam samo jednu instacnu ovog view modela.
-            services.AddSingleton<BidViewModel>();
             services.AddSingleton<TimerStore>();
+            services.AddSingleton<ItemStore>();
+            services.AddSingleton<BidViewModel>();
 
             //Registrujem sve potrebne view modele
             services.AddSingleton<ViewModelDelegateRenavigator<HomeViewModel>>();
+            services.AddSingleton<ViewModelDelegateRenavigator<BidViewModel>>();
 
             services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
             {
@@ -87,13 +90,16 @@ namespace Auction.IO.UI
                         services.GetRequiredService<IDataService<Item>>(),
                         services.GetRequiredService<TimerStore>(),
                         services.GetRequiredService<BidViewModel>()),
-                    services.GetRequiredService<INavigator>(),
                     services.GetRequiredService<IBidItemService>(),
                     services.GetRequiredService<IAuthenticator>(),
-                    services.GetRequiredService<ViewModelDelegateRenavigator<HomeViewModel>>());
+                    services.GetRequiredService<ViewModelDelegateRenavigator<BidViewModel>>(),
+                    services.GetRequiredService<ItemStore>(),
+                    services.GetRequiredService<TimerStore>(),
+                    services.GetRequiredService<INavigator>());
             });
 
-            services.AddSingleton<CreateViewModel<BidViewModel>>(services => {
+            services.AddSingleton<CreateViewModel<BidViewModel>>(services =>
+            {
                 return () => services.GetRequiredService<BidViewModel>();
             });
 
