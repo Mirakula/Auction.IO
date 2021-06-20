@@ -14,11 +14,7 @@
             <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
                 <views:HomeView/>
             </DataTemplate>
-
-            <DataTemplate DataType="{x:Type viewModels:PortfolioViewModel}">
-                <views:ProtfolioView/>
-            </DataTemplate>
-
+            
             <DataTemplate DataType="{x:Type viewModels:BidViewModel}">
                 <views:BidView/>
             </DataTemplate>

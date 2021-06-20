@@ -22,11 +22,14 @@ namespace Auction.IO.Domain.Services.AuthenticationServices
         {
             UserAccount storedAccount = await _userAccountService.GetByUserName(username);
 
+            if (storedAccount == null)
+                return null;
+
             PasswordVerificationResult passwordResult = _passwordHasher.VerifyHashedPassword(storedAccount.PasswordHash, password);
-            
+
             if (passwordResult != PasswordVerificationResult.Success)
             {
-                throw new InvalidPasswordException(username, password);
+                return null;
             }
 
             return storedAccount;

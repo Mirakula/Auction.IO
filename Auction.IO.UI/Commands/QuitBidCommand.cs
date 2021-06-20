@@ -7,14 +7,14 @@ namespace Auction.IO.UI.Commands
 {
     public class QuitBidCommand : ICommand
     {
-        private readonly INavigator _navigator;
+        private readonly IRenavigator _quitRenavigator;
         private readonly BidViewModel _bidViewModel;
 
 
-        public QuitBidCommand(BidViewModel bidViewModel, INavigator navigator)
+        public QuitBidCommand(BidViewModel bidViewModel, IRenavigator quitRenavigator)
         {
             _bidViewModel = bidViewModel;
-            _navigator = navigator;
+            _quitRenavigator = quitRenavigator;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -26,7 +26,7 @@ namespace Auction.IO.UI.Commands
 
         public void Execute(object parameter)
         {
-
+            _quitRenavigator.Renavigate();
         }
     }
 }

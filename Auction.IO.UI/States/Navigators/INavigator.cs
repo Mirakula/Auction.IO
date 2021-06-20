@@ -5,9 +5,9 @@ namespace Auction.IO.UI.States.Navigators
     public enum ViewType
     {
         Home,
-        Portfolio,
         Bid,
-        Login
+        Login,
+        AddItem
     }
     public interface INavigator
     {

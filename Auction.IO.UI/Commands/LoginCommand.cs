@@ -10,13 +10,13 @@ namespace Auction.IO.UI.Commands
     {
         private readonly IAuthenticator _authenticator;
         private readonly LoginViewModel _loginViewModel;
-        private readonly IRenavigator _renavigator;
+        private readonly IRenavigator _loginRenavigator;
 
-        public LoginCommand(LoginViewModel loginViewModel, IAuthenticator authenticator, IRenavigator renavigator)
+        public LoginCommand(LoginViewModel loginViewModel, IAuthenticator authenticator, IRenavigator loginRenavigator)
         {
             _loginViewModel = loginViewModel;
             _authenticator = authenticator;
-            _renavigator = renavigator;
+            _loginRenavigator = loginRenavigator;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -31,7 +31,7 @@ namespace Auction.IO.UI.Commands
             bool success = await _authenticator.Login(_loginViewModel.Name, parameter.ToString());
 
             if (success)
-                _renavigator.Renavigate(); 
+                _loginRenavigator.Renavigate(); 
         }
     }
 }

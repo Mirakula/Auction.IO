@@ -8,14 +8,14 @@ namespace Auction.IO.UI.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         private readonly IAuthenticator _authenticator;
-        private readonly IRenavigator _renavigator;
+        private readonly IRenavigator _loginRenavigator;
 
-        public LoginViewModel(IAuthenticator authenticator, IRenavigator renavigator)
+        public LoginViewModel(IAuthenticator authenticator, IRenavigator loginRenavigator)
         {
             _authenticator = authenticator;
-            _renavigator = renavigator;
+            _loginRenavigator = loginRenavigator;
 
-            LoginCommand = new LoginCommand(this, _authenticator, _renavigator);
+            LoginCommand = new LoginCommand(this, _authenticator, _loginRenavigator);
         }
 
         private string _name;

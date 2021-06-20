@@ -1,7 +1,7 @@
 ﻿using Auction.IO.Domain.Models;
 using Auction.IO.Domain.Services;
+using Auction.IO.UI.States;
 using Auction.IO.UI.States.Timers;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -13,13 +13,14 @@ namespace Auction.IO.UI.ViewModels
     {
         private readonly IDataService<Item> _dataService;
         private readonly TimerStore _timerStore;
-        private readonly BidViewModel _bidViewModel;
+        private readonly ItemStore _itemStore;
 
-        public ItemViewModel(IDataService<Item> dataService, TimerStore timerStore, BidViewModel bidViewModel)
+        public ItemViewModel(IDataService<Item> dataService, TimerStore timerStore, ItemStore itemStore)
         {
             _dataService = dataService;
             _timerStore = timerStore;
-            _bidViewModel = bidViewModel;
+            _itemStore = itemStore;
+
             _timerStore.RemainingSecondsChanged += _timerStore_RemainingSecondsChanged;
             _timerStore.Start();
 
@@ -36,7 +37,6 @@ namespace Auction.IO.UI.ViewModels
             {
                 _selectedItem = value;
                 OnPropertyChanged(nameof(SelectedItem));
-                _bidViewModel.SelectedItem = SelectedItem;
             }
         }
 

@@ -10,35 +10,36 @@ using System.Windows.Input;
 
 namespace Auction.IO.UI.Commands
 {
-    public delegate void NotifyItemSelected();
 
     public class ItemBidCommand : ICommand
     {
         private readonly IAuthenticator _authenticator;
         private readonly INavigator _navigator;
         private readonly IBidItemService _bidItemService;
-        private readonly IRenavigator _renavigator;
+        private readonly IRenavigator _loginRenavigator;
+        private readonly IRenavigator _quitRenavigator;
         private readonly ItemStore _itemStore;
         private readonly TimerStore _timerStore;
         private readonly ItemViewModel _itemViewModel;
 
-        public Item SelectedItem { get; set; }
 
-        public ItemBidCommand(IAuthenticator authenticator, 
-                              INavigator navigator, 
-                              IBidItemService bidItemService, 
-                              IRenavigator renavigator, 
-                              ItemViewModel itemViewModel ,
+        public ItemBidCommand(IAuthenticator authenticator,
+                              INavigator navigator,
+                              IBidItemService bidItemService,
+                              IRenavigator loginRenavigator,
+                              ItemViewModel itemViewModel,
                               ItemStore itemStore,
-                              TimerStore timerStore)
+                              TimerStore timerStore,
+                              IRenavigator quitRenavigator)
         {
             _authenticator = authenticator;
             _navigator = navigator;
             _bidItemService = bidItemService;
-            _renavigator = renavigator;
+            _loginRenavigator = loginRenavigator;
             _itemStore = itemStore;
             _itemViewModel = itemViewModel;
             _timerStore = timerStore;
+            _quitRenavigator = quitRenavigator;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -54,20 +55,21 @@ namespace Auction.IO.UI.Commands
             {
                 Item item = new Item
                 {
-                    Name = _itemViewModel.Name,
-                    Price = _itemViewModel.Price,
-                    LastBidder = _itemViewModel.LastBidder,
-                    LastBidPrice = _itemViewModel.LastBidderPrice,
-                    Location = _itemViewModel.Location,
-                    IsDeleted = _itemViewModel.IsDeleted,
-                    IsSold = _itemViewModel.IsSold
+                    Name = _itemViewModel.SelectedItem.Name,
+                    Price = _itemViewModel.SelectedItem.Price,
+                    LastBidder = _itemViewModel.SelectedItem.LastBidder,
+                    LastBidPrice = _itemViewModel.SelectedItem.LastBidPrice,
+                    Location = _itemViewModel.SelectedItem.Location,
+                    IsDeleted = _itemViewModel.SelectedItem.IsDeleted,
+                    IsSold = _itemViewModel.SelectedItem.IsSold
                 };
 
+
                 _itemStore.SelectedItem(item);
-                _navigator.CurrentViewModel = new BidViewModel(_bidItemService, _itemStore, _timerStore, _navigator);
+                _navigator.CurrentViewModel = new BidViewModel(_bidItemService, _itemStore, _timerStore, _quitRenavigator, item, _authenticator);
             }
             else
-                _navigator.CurrentViewModel = new LoginViewModel(_authenticator, _renavigator);
+                _navigator.CurrentViewModel = new LoginViewModel(_authenticator, _loginRenavigator);
         }
     }
 }

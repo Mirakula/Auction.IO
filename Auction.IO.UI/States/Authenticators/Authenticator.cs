@@ -3,6 +3,7 @@ using Auction.IO.Domain.Services.AuthenticationService;
 using Auction.IO.UI.Models;
 using System;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Auction.IO.UI.States.Authenticators
 {
@@ -37,6 +38,9 @@ namespace Auction.IO.UI.States.Authenticators
             try
             {
                 CurrentUserAccount = await _authenticationService.Login(name, password);
+
+                if (CurrentUserAccount == null)
+                    MessageBox.Show("Incorrect user. Please try again !");
             }
             catch (Exception)
             {

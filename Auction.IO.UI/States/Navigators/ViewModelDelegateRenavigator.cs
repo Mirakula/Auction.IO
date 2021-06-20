@@ -12,7 +12,6 @@ namespace Auction.IO.UI.States.Navigators
             _createViewModel = createViewModel;
             _navigator = navigator;
         }
-
         public void Renavigate()
         {
             _navigator.CurrentViewModel = _createViewModel();

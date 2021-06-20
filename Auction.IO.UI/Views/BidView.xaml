@@ -21,18 +21,18 @@
 
                     <StackPanel Margin="0 30 0 0 ">
                         <Label Content="Name:" FontSize="16" FontWeight="Medium"/>
-                        <Label Content="{Binding SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
+                        <Label Content="{Binding Item.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
                         
                     </StackPanel>
 
                     <StackPanel>
                         <Label Content="Price:" FontSize="16" FontWeight="Medium"/>
-                        <Label Content="{Binding SelectedItem.Price, StringFormat={}{0:c}}" FontSize="16"/>
+                        <Label Content="{Binding Item.Price, StringFormat={}{0:c}}" FontSize="16"/>
                     </StackPanel>
 
                     <StackPanel>
                         <Label Content="Location:" FontSize="16" FontWeight="Medium"/>
-                        <Label Content="{Binding SelectedItem.Location}" FontSize="16"/>
+                        <Label Content="{Binding Item.Location}" FontSize="16"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -45,12 +45,12 @@
 
                     <StackPanel>
                         <Label Content="Last bid price:" FontSize="16" FontWeight="Medium"/>
-                        <Label Content="{Binding SelectedItem.LastBidPrice}"  FontSize="16"/>
+                        <Label Content="{Binding Item.LastBidPrice}"  FontSize="16"/>
                     </StackPanel>
 
                     <StackPanel>
                         <Label Content="Last bidder:" FontSize="16" />
-                        <Label Content="{Binding SelectedItem.LastBidder}" FontSize="16"/>
+                        <Label Content="{Binding Item.LastBidder}" FontSize="16"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>            
@@ -62,14 +62,15 @@
                     <Label Content="Options:" FontSize="16" FontWeight="Heavy"/>
                     <StackPanel>
                         <Label Content="Enter new bid price: "/>
-                        <TextBox Text="{Binding NewBidPrice}" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="20"/>
+                        <TextBox Text="{Binding NewBidPrice, UpdateSourceTrigger=PropertyChanged}" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="20"/>
                         <Label Content="Time remainig:" HorizontalAlignment="Center"/>
                         <TextBlock Text="{Binding RemainingSeconds, StringFormat=N0}" FontSize="16" FontWeight="DemiBold"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Button Content="Bid" Width="75" Margin="5" Command="{Binding QuitBidCommand}"/>
-                        <Button Content="Quit" Width="75" Margin="5"/>
+                        <Button Content="Bid" Width="75" Margin="5" Command="{Binding BidCommand, UpdateSourceTrigger=PropertyChanged}"
+                                CommandParameter="{Binding NewPrice}"/>
+                        <Button Content="Quit" Width="75" Margin="5" Command="{Binding QuitBidCommand}"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

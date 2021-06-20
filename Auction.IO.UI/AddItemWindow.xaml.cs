@@ -10,19 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Auction.IO.UI.Views
+namespace Auction.IO.UI
 {
     /// <summary>
-    /// Interaction logic for ProtfolioView.xaml
+    /// Interaction logic for AddItemWindow.xaml
     /// </summary>
-    public partial class ProtfolioView : UserControl
+    public partial class AddItemWindow : Window
     {
-        public ProtfolioView()
+        public AddItemWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

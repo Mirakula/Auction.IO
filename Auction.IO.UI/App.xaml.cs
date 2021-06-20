@@ -29,19 +29,32 @@ namespace Auction.IO.UI
             //IPasswordHasher _passwordHasher = serviceProvider.GetRequiredService<IPasswordHasher>();
             //IDataService<UserAccount> _userDataService = serviceProvider.GetRequiredService<IDataService<UserAccount>>();
 
+            //var newUserAdmin = new UserAccount()
+            //{
+            //    Name = "AHaris",
+            //    Surname = "Krnjic",
+            //    Email = "hkrnjic@gmail.com",
+            //    PasswordHash = _passwordHasher.HashPassword("password123"),
+            //    Street = "Zagrebacka bb",
+            //    Country = "BiH",
+            //    DateJoined = DateTime.Now,
+            //    RoleId = 2
+            //};
+
             //var newUser = new UserAccount()
             //{
-            //    Name = "AAmar",
-            //    Surname = "Dzanan",
-            //    Email = "amar.dzanan@edu.fit.ba",
-            //    PasswordHash = _passwordHasher.HashPassword("password"),
-            //    Street = "Radnicka 64",
+            //    Name = "Haris",
+            //    Surname = "Krnjic",
+            //    Email = "hkrnjic@gmail.com",
+            //    PasswordHash = _passwordHasher.HashPassword("password321"),
+            //    Street = "Zagreback bb",
             //    Country = "BiH",
             //    DateJoined = DateTime.Now,
             //    RoleId = 1
             //};
 
-            //var result = Task.Run(async () => await _userDataService.Create(newUser)).Result;
+            //var res = Task.Run(async () => await _userDataService.Create(newUserAdmin)).Result;
+            //var result2 = Task.Run(async () => await _userDataService.Create(newUser)).Result;
 
             // Pokrecem glavni prozor.
             Window window = serviceProvider.GetRequiredService<MainWindow>();
@@ -78,6 +91,8 @@ namespace Auction.IO.UI
             services.AddSingleton<TimerStore>();
             services.AddSingleton<ItemStore>();
             services.AddSingleton<BidViewModel>();
+            services.AddSingleton<IRenavigator, ViewModelDelegateRenavigator<HomeViewModel>>();
+            services.AddSingleton<IRenavigator, ViewModelDelegateRenavigator<BidViewModel>>();
 
             //Registrujem sve potrebne view modele
             services.AddSingleton<ViewModelDelegateRenavigator<HomeViewModel>>();
@@ -89,25 +104,27 @@ namespace Auction.IO.UI
                     new ItemViewModel(
                         services.GetRequiredService<IDataService<Item>>(),
                         services.GetRequiredService<TimerStore>(),
-                        services.GetRequiredService<BidViewModel>()),
+                        services.GetRequiredService<ItemStore>()),
                     services.GetRequiredService<IBidItemService>(),
                     services.GetRequiredService<IAuthenticator>(),
-                    services.GetRequiredService<ViewModelDelegateRenavigator<BidViewModel>>(),
+                    services.GetRequiredService<ViewModelDelegateRenavigator<HomeViewModel>>(),
+                    services.GetRequiredService<ViewModelDelegateRenavigator<HomeViewModel>>(),
                     services.GetRequiredService<ItemStore>(),
                     services.GetRequiredService<TimerStore>(),
-                    services.GetRequiredService<INavigator>());
+                    services.GetRequiredService<INavigator>(),
+                    services.GetRequiredService<IDataService<Item>>());
             });
 
             services.AddSingleton<CreateViewModel<BidViewModel>>(services =>
             {
-                return () => services.GetRequiredService<BidViewModel>();
+                return () => new BidViewModel(
+                    services.GetRequiredService<IBidItemService>(),
+                    services.GetRequiredService<ItemStore>(),
+                    services.GetRequiredService<TimerStore>(),
+                    services.GetRequiredService<ViewModelDelegateRenavigator<HomeViewModel>>(),
+                    new Item(),
+                    services.GetRequiredService<IAuthenticator>());
             });
-
-            services.AddSingleton<CreateViewModel<PortfolioViewModel>>(services =>
-            {
-                return () => new PortfolioViewModel();
-            });
-
 
             services.AddSingleton<CreateViewModel<LoginViewModel>>(services =>
             {
